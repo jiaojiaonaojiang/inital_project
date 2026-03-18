@@ -92,3 +92,24 @@ export async function deleteAdImage(id: string): Promise<ApiResponse<ReachAd>> {
   });
   return res.json();
 }
+
+export async function uploadAdVideo(
+  id: string,
+  file: File
+): Promise<ApiResponse<ReachAd>> {
+  const formData = new FormData();
+  formData.append("video", file);
+
+  const res = await fetch(`${BASE_URL}/${id}/upload-video`, {
+    method: "POST",
+    body: formData,
+  });
+  return res.json();
+}
+
+export async function deleteAdVideo(id: string): Promise<ApiResponse<ReachAd>> {
+  const res = await fetch(`${BASE_URL}/${id}/upload-video`, {
+    method: "DELETE",
+  });
+  return res.json();
+}

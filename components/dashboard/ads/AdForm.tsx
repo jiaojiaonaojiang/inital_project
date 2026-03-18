@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import PlacementRulesForm from "./PlacementRulesForm";
 import ScheduleForm from "./ScheduleForm";
 import ImageUploadCard from "./ImageUploadCard";
+import VideoUploadCard from "./VideoUploadCard";
 import AdPreviewCard from "./AdPreviewCard";
 import type {
   CreateAdPayload,
@@ -19,6 +20,8 @@ import {
   updateAd,
   uploadAdImage,
   deleteAdImage,
+  uploadAdVideo,
+  deleteAdVideo,
 } from "../../../lib/ads";
 
 interface AdFormProps {
@@ -71,6 +74,10 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
     initialData?.imageUrl || null
   );
   const [pendingImage, setPendingImage] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(
+    initialData?.videoUrl || null
+  );
+  const [pendingVideo, setPendingVideo] = useState<File | null>(null);
 
   const handleScheduleChange = (field: string, value: string | boolean) => {
     if (field === "startAt") setStartAt(value as string);
@@ -88,6 +95,16 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
   const handleImageRemove = () => {
     setPendingImage(null);
     setImageUrl(null);
+  };
+
+  const handleVideoUpload = (file: File) => {
+    setPendingVideo(file);
+    setVideoUrl(URL.createObjectURL(file));
+  };
+
+  const handleVideoRemove = () => {
+    setPendingVideo(null);
+    setVideoUrl(null);
   };
 
   const handleSubmit = async (asDraft: boolean) => {
@@ -144,6 +161,15 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
         }
       } else if (!imageUrl && initialData?.imageUrl) {
         await deleteAdImage(adId);
+      }
+
+      if (pendingVideo) {
+        const uploadRes = await uploadAdVideo(adId, pendingVideo);
+        if (!uploadRes.success) {
+          console.warn("Video upload failed:", uploadRes.error);
+        }
+      } else if (!videoUrl && initialData?.videoUrl) {
+        await deleteAdVideo(adId);
       }
 
       router.push("/dashboard/ads");
@@ -249,6 +275,16 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
           />
         </div>
 
+        {adType === "video" && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <VideoUploadCard
+              videoUrl={videoUrl}
+              onUpload={handleVideoUpload}
+              onRemove={handleVideoRemove}
+            />
+          </div>
+        )}
+
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <PlacementRulesForm
             rules={placementRules}
@@ -301,6 +337,8 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
             ctaText={ctaText}
             ctaUrl={ctaUrl}
             imageUrl={imageUrl}
+            videoUrl={videoUrl}
+            adType={adType}
           />
         </div>
       </div>

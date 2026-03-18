@@ -14,15 +14,27 @@ function getS3Client(): S3Client {
   });
 }
 
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const IMAGE_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const VIDEO_MIME_TYPES = ["video/mp4", "video/webm", "video/ogg"];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
 export function validateImageFile(file: File): string | null {
-  if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-    return `Invalid file type: ${file.type}. Allowed: ${ALLOWED_MIME_TYPES.join(", ")}`;
+  if (!IMAGE_MIME_TYPES.includes(file.type)) {
+    return `Invalid file type: ${file.type}. Allowed: ${IMAGE_MIME_TYPES.join(", ")}`;
   }
-  if (file.size > MAX_FILE_SIZE) {
+  if (file.size > MAX_IMAGE_SIZE) {
     return `File too large: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max: 5MB`;
+  }
+  return null;
+}
+
+export function validateVideoFile(file: File): string | null {
+  if (!VIDEO_MIME_TYPES.includes(file.type)) {
+    return `Invalid file type: ${file.type}. Allowed: ${VIDEO_MIME_TYPES.join(", ")}`;
+  }
+  if (file.size > MAX_VIDEO_SIZE) {
+    return `File too large: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max: 50MB`;
   }
   return null;
 }

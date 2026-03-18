@@ -18,6 +18,8 @@ model ReachAd {
   adType              String   @default("image") @map("ad_type") // image | text | carousel | video
   imageUrl            String?  @map("image_url")
   imageKey            String?  @map("image_key")
+  videoUrl            String?  @map("video_url")
+  videoKey            String?  @map("video_key")
   startAt             DateTime? @map("start_at")
   endAt               DateTime? @map("end_at")
   timezone            String   @default("UTC")

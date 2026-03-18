@@ -262,6 +262,8 @@ export default function AdDetailPage() {
               ctaText={ad.ctaText || ""}
               ctaUrl={ad.ctaUrl || ""}
               imageUrl={ad.imageUrl}
+              videoUrl={ad.videoUrl}
+              adType={ad.adType}
             />
           </div>
         </div>
