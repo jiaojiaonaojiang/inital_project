@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model ReachAd {
+  id                  String   @id @default(uuid())
+  businessId          String   @map("business_id")
+  title               String
+  description         String?
+  ctaText             String?  @map("cta_text")
+  ctaUrl              String?  @map("cta_url")
+  status              String   @default("draft") // draft | active | paused | archived
+  adType              String   @default("image") @map("ad_type") // image | text | carousel | video
+  imageUrl            String?  @map("image_url")
+  imageKey            String?  @map("image_key")
+  videoUrl            String?  @map("video_url")
+  videoKey            String?  @map("video_key")
+  startAt             DateTime? @map("start_at")
+  endAt               DateTime? @map("end_at")
+  timezone            String   @default("UTC")
+  isPrimeTimeEnabled  Boolean  @default(false) @map("is_prime_time_enabled")
+  createdBy           String?  @map("created_by")
+  updatedBy           String?  @map("updated_by")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  placementRules ReachAdPlacementRule[]
+
+  @@map("reach_ads")
+}
+
+model ReachAdPlacementRule {
+  id                      String  @id @default(uuid())
+  reachAdId               String  @map("reach_ad_id")
+  placementType           String  @map("placement_type") // welcome | mid_conversation | post_response | fallback
+  priority                Int     @default(0)
+  maxImpressionsPerSession Int?   @map("max_impressions_per_session")
+  cooldownMinutes         Int?    @map("cooldown_minutes")
+  enabled                 Boolean @default(true)
+
+  reachAd ReachAd @relation(fields: [reachAdId], references: [id], onDelete: Cascade)
+
+  @@map("reach_ad_placement_rules")
+}

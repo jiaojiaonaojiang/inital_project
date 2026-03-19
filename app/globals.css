@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@keyframes glow-sweep {
+    0% {
+      background-position: -600px 50%;
+    }
+    100% {
+      background-position: 600px 50%;
+    }
+  }
+  
+  .text-glow {
+    background: linear-gradient(
+      90deg,
+      #3b1254 0px,
+      #3b1254 200px,
+      #c084fc 300px,
+      #3b1254 400px,
+      #3b1254 600px
+    );
+    background-size: 600px 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow-sweep 4s linear infinite;
+  }

@@ -1,0 +1,86 @@
+"use client";
+
+import Image from "next/image";
+import { ExternalLink } from "lucide-react";
+
+interface AdPreviewCardProps {
+  title: string;
+  description: string;
+  ctaText: string;
+  ctaUrl: string;
+  imageUrl: string | null;
+  videoUrl: string | null;
+  adType: string;
+}
+
+export default function AdPreviewCard({
+  title,
+  description,
+  ctaText,
+  ctaUrl,
+  imageUrl,
+  videoUrl,
+  adType,
+}: AdPreviewCardProps) {
+  const hasContent = title || description || ctaText || imageUrl || videoUrl;
+
+  if (!hasContent) {
+    return (
+      <div className="border border-gray-200 rounded-xl p-6 bg-gray-50/50 text-center">
+        <p className="text-sm text-gray-400">
+          Fill in the form to see a live preview of your ad.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <h3 className="text-sm font-semibold text-gray-700">Preview</h3>
+      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+        {adType === "video" && videoUrl ? (
+          <video
+            src={videoUrl}
+            controls
+            className="w-full h-40 object-cover"
+          />
+        ) : imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt="Ad preview"
+            width={400}
+            height={200}
+            className="w-full h-40 object-cover"
+          />
+        ) : null}
+        <div className="p-4 space-y-2">
+          {title && (
+            <h4 className="font-semibold text-gray-900 text-base">{title}</h4>
+          )}
+          {description && (
+            <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+          )}
+          {ctaText &&
+            (ctaUrl ? (
+              <a
+                href={ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {ctaText}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            ) : (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg"
+              >
+                {ctaText}
+              </button>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
