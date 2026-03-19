@@ -13,7 +13,7 @@ export default function Home() {
         </p>
         <Link
           href="/dashboard/ads"
-          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-purple-800 px-6 py-3 text-white font-medium hover:bg-purple-700 transition-colors"
         >
           Go to Dashboard
           <svg

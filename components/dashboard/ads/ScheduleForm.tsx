@@ -48,7 +48,7 @@ export default function ScheduleForm({
             type="datetime-local"
             value={startAt}
             onChange={(e) => onChange("startAt", e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
           />
         </div>
 
@@ -60,7 +60,7 @@ export default function ScheduleForm({
             type="datetime-local"
             value={endAt}
             onChange={(e) => onChange("endAt", e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
           />
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function ScheduleForm({
         <select
           value={timezone}
           onChange={(e) => onChange("timezone", e.target.value)}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
         >
           {TIMEZONES.map((tz) => (
             <option key={tz} value={tz}>
@@ -87,7 +87,7 @@ export default function ScheduleForm({
           type="checkbox"
           checked={isPrimeTimeEnabled}
           onChange={(e) => onChange("isPrimeTimeEnabled", e.target.checked)}
-          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+          className="rounded border-gray-300 text-purple-600 focus:ring-purple-500 w-4 h-4"
         />
         <div>
           <span className="text-sm font-medium text-gray-700">

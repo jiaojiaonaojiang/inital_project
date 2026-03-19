@@ -51,7 +51,7 @@ export default function AdDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-800 rounded-full animate-spin" />
       </div>
     );
   }
@@ -60,7 +60,7 @@ export default function AdDetailPage() {
     return (
       <div className="text-center py-20">
         <h2 className="text-xl font-semibold text-gray-900">Ad not found</h2>
-        <Link href="/dashboard/ads" className="text-blue-600 text-sm mt-2 inline-block">
+        <Link href="/dashboard/ads" className="text-purple-800 text-sm mt-2 inline-block">
           Back to ads
         </Link>
       </div>
@@ -135,7 +135,7 @@ export default function AdDetailPage() {
               {ad.ctaUrl && (
                 <div>
                   <dt className="text-xs text-gray-500">CTA URL</dt>
-                  <dd className="text-sm font-medium text-blue-600 mt-0.5 truncate">
+                  <dd className="text-sm font-medium text-purple-800 mt-0.5 truncate">
                     <a href={ad.ctaUrl} target="_blank" rel="noopener noreferrer">
                       {ad.ctaUrl}
                     </a>

@@ -176,7 +176,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Weekend Promotion"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               maxLength={200}
             />
           </div>
@@ -190,7 +190,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Briefly describe the ad..."
               rows={3}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
               maxLength={1000}
             />
           </div>
@@ -205,7 +205,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
                 value={ctaText}
                 onChange={(e) => setCtaText(e.target.value)}
                 placeholder="e.g. Shop Now"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                 maxLength={100}
               />
             </div>
@@ -218,7 +218,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
                 value={ctaUrl}
                 onChange={(e) => setCtaUrl(e.target.value)}
                 placeholder="https://example.com"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               />
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
             <select
               value={adType}
               onChange={(e) => setAdType(e.target.value as AdType)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
             >
               {AD_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -279,7 +279,7 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
             type="button"
             disabled={saving || !title}
             onClick={() => handleSubmit(false)}
-            className="px-5 py-2.5 bg-blue-600 rounded-lg text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="px-5 py-2.5 bg-purple-600 rounded-lg text-sm font-medium text-white hover:bg-purple-800 disabled:opacity-50 transition-colors"
           >
             {saving ? "Publishing..." : mode === "create" ? "Publish Ad" : "Save Changes"}
           </button>

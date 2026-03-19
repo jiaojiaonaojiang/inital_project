@@ -40,7 +40,7 @@ export default function DashboardLayout({
         }`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-          <Link href="/dashboard/ads" className="font-bold text-lg text-blue-600">
+          <Link href="/dashboard/ads" className="font-bold text-lg text-purple-800 text-glow">
             ReachAds
           </Link>
           <button
@@ -62,7 +62,7 @@ export default function DashboardLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-blue-50 text-blue-700"
+                    ? "bg-purple-50 text-purple-700"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
@@ -82,7 +82,7 @@ export default function DashboardLayout({
           >
             <Menu className="w-5 h-5" />
           </button>
-          <h2 className="font-semibold text-gray-800">Ads Management Dashboard</h2>
+          <h2 className="font-semibold text-gray-900">Ads Management Dashboard</h2>
         </header>
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>

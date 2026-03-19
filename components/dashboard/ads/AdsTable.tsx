@@ -39,7 +39,7 @@ export default function AdsTable({ ads, onStatusChange, onDelete }: AdsTableProp
         <p className="text-gray-500 mb-6">Create your first ad to get started.</p>
         <Link
           href="/dashboard/ads/create"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-purple-800 text-white text-sm font-medium rounded-lg hover:bg-purple-800 transition-colors"
         >
           Create Ad
         </Link>
@@ -113,7 +113,7 @@ export default function AdsTable({ ads, onStatusChange, onDelete }: AdsTableProp
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`text-sm ${ad.isPrimeTimeEnabled ? "text-blue-600 font-medium" : "text-gray-400"}`}
+                    className={`text-sm ${ad.isPrimeTimeEnabled ? "text-purple-600 font-medium" : "text-gray-400"}`}
                   >
                     {ad.isPrimeTimeEnabled ? "Enabled" : "Off"}
                   </span>
@@ -122,14 +122,14 @@ export default function AdsTable({ ads, onStatusChange, onDelete }: AdsTableProp
                   <div className="flex items-center justify-end gap-1">
                     <Link
                       href={`/dashboard/ads/${ad.id}`}
-                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      className="p-2 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
                       title="View"
                     >
                       <Eye className="w-4 h-4" />
                     </Link>
                     <Link
                       href={`/dashboard/ads/${ad.id}/edit`}
-                      className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      className="p-2 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
                       title="Edit"
                     >
                       <Pencil className="w-4 h-4" />
