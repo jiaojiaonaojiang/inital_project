@@ -74,7 +74,7 @@ export default function AdPreviewCard({
             ) : (
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg"
+                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg"
               >
                 {ctaText}
               </button>

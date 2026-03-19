@@ -51,21 +51,14 @@ export default function AdsListPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Advertisements</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage ads for the live conversational agent.
-          </p>
-        </div>
-        <Link
-          href="/dashboard/ads/create"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors self-start"
-        >
-          <Plus className="w-4 h-4" />
-          Create Ad
-        </Link>
+      <div>
+        <h1 className="text-4xl font-bold text-glow">Advertisement</h1>
+        <p className="text-sm text-gray-500 mt-2">
+          Manage ads for the live conversational agent.
+        </p>
       </div>
+
+      <hr className="border-gray-200" />
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
@@ -78,7 +71,7 @@ export default function AdsListPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-300 text-sm focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
           />
         </div>
         <div className="relative">
@@ -89,7 +82,7 @@ export default function AdsListPage() {
               setStatusFilter(e.target.value as AdStatus | "");
               setPage(1);
             }}
-            className="pl-9 pr-8 py-2 rounded-lg border border-gray-300 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 appearance-none bg-white"
+            className="pl-9 pr-8 py-2 rounded-lg border border-gray-300 text-sm focus:border-purple-600 focus:ring-1 focus:ring-purple-600 appearance-none bg-white"
           >
             <option value="">All Statuses</option>
             {AD_STATUSES.map((s) => (
@@ -99,11 +92,19 @@ export default function AdsListPage() {
             ))}
           </select>
         </div>
+        <Link
+          href="/dashboard/ads/create"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-800 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          Create Ad
+        </Link>
       </div>
+
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-800 rounded-full animate-spin" />
         </div>
       ) : (
         <AdsTable
