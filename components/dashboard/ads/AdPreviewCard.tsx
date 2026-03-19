@@ -60,12 +60,25 @@ export default function AdPreviewCard({
           {description && (
             <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           )}
-          {ctaText && (
-            <button className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg">
-              {ctaText}
-              {ctaUrl && <ExternalLink className="w-3.5 h-3.5" />}
-            </button>
-          )}
+          {ctaText &&
+            (ctaUrl ? (
+              <a
+                href={ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {ctaText}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            ) : (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 mt-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg"
+              >
+                {ctaText}
+              </button>
+            ))}
         </div>
       </div>
     </div>
