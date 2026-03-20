@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const placementRuleSchema = z.object({
   placementType: z.enum(["welcome", "mid_conversation", "post_response", "fallback"]),
+  position: z.enum(["top_left", "bottom_left", "top_right", "bottom_right"]).optional(),
   priority: z.number().int().min(0).default(0),
   maxImpressionsPerSession: z.number().int().min(1).optional(),
   cooldownMinutes: z.number().int().min(0).optional(),

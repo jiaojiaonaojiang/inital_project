@@ -38,6 +38,7 @@ model ReachAdPlacementRule {
   id                      String  @id @default(uuid())
   reachAdId               String  @map("reach_ad_id")
   placementType           String  @map("placement_type") // welcome | mid_conversation | post_response | fallback
+  position                String? @map("position")
   priority                Int     @default(0)
   maxImpressionsPerSession Int?   @map("max_impressions_per_session")
   cooldownMinutes         Int?    @map("cooldown_minutes")
