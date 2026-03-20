@@ -1,6 +1,7 @@
 export type AdStatus = "draft" | "active" | "paused" | "archived";
 export type AdType = "image" | "text" | "carousel" | "video";
 export type PlacementType = "welcome" | "mid_conversation" | "post_response" | "fallback";
+export type PlacementPosition = "top_left" | "bottom_left" | "top_right" | "bottom_right";
 
 export interface CreateAdPayload {
   businessId: string;
@@ -32,6 +33,7 @@ export interface UpdateAdPayload {
 
 export interface CreatePlacementRulePayload {
   placementType: PlacementType;
+  position?: PlacementPosition;
   priority?: number;
   maxImpressionsPerSession?: number;
   cooldownMinutes?: number;
@@ -64,6 +66,7 @@ export interface ApiResponse<T = unknown> {
 export const AD_STATUSES: AdStatus[] = ["draft", "active", "paused", "archived"];
 export const AD_TYPES: AdType[] = ["image", "text", "carousel", "video"];
 export const PLACEMENT_TYPES: PlacementType[] = ["welcome", "mid_conversation", "post_response", "fallback"];
+export const PLACEMENT_POSITIONS: PlacementPosition[] = ["top_left", "bottom_left", "top_right", "bottom_right"];
 
 export const VALID_STATUS_TRANSITIONS: Record<AdStatus, AdStatus[]> = {
   draft: ["active", "archived"],
