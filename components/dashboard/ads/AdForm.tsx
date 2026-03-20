@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { LayoutTemplate, X } from "lucide-react";
 import PlacementRulesForm from "./PlacementRulesForm";
 import ScheduleForm from "./ScheduleForm";
 import ImageUploadCard from "./ImageUploadCard";
@@ -24,6 +26,9 @@ import {
   deleteAdVideo,
 } from "../../../lib/ads";
 
+// Adjust path if your image.png is located elsewhere
+import bgImage from "./image.png"; 
+
 interface AdFormProps {
   mode: "create" | "edit";
   initialData?: ReachAd & { placementRules?: ReachAdPlacementRule[] };
@@ -37,10 +42,26 @@ function toLocalDatetime(dateStr: string | null | undefined): string {
   return local.toISOString().slice(0, 16);
 }
 
+// Helper to convert the position string to Tailwind absolute classes
+function getPositionClasses(position?: string) {
+  switch (position) {
+    case "top_left":
+      return "top-4 left-4";
+    case "bottom_left":
+      return "bottom-4 left-4";
+    case "top_right":
+      return "top-4 right-4";
+    case "bottom_right":
+    default:
+      return "bottom-4 right-4";
+  }
+}
+
 export default function AdForm({ mode, initialData }: AdFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const [title, setTitle] = useState(initialData?.title || "");
   const [description, setDescription] = useState(initialData?.description || "");
@@ -59,17 +80,20 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
   const [isPrimeTimeEnabled, setIsPrimeTimeEnabled] = useState(
     initialData?.isPrimeTimeEnabled || false
   );
+  
   const [placementRules, setPlacementRules] = useState<
     CreatePlacementRulePayload[]
   >(
     initialData?.placementRules?.map((r) => ({
       placementType: r.placementType as CreatePlacementRulePayload["placementType"],
+      position: (r as any).position, // <-- BUG FIX: Added position mapping
       priority: r.priority,
       maxImpressionsPerSession: r.maxImpressionsPerSession ?? undefined,
       cooldownMinutes: r.cooldownMinutes ?? undefined,
       enabled: r.enabled,
     })) || []
   );
+  
   const [imageUrl, setImageUrl] = useState<string | null>(
     initialData?.imageUrl || null
   );
@@ -182,166 +206,228 @@ export default function AdForm({ mode, initialData }: AdFormProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+        <div className="lg:col-span-2 space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-700">Basic Details</h3>
+          <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+            <h3 className="text-sm font-semibold text-gray-700">Basic Details</h3>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Title <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Weekend Promotion"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-              maxLength={200}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Description
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Briefly describe the ad..."
-              rows={3}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
-              maxLength={1000}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
-                CTA Text
+                Title <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                value={ctaText}
-                onChange={(e) => setCtaText(e.target.value)}
-                placeholder="e.g. Shop Now"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Weekend Promotion"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-                maxLength={100}
+                maxLength={200}
               />
             </div>
+
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
-                CTA URL
+                Description
               </label>
-              <input
-                type="url"
-                value={ctaUrl}
-                onChange={(e) => setCtaUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Briefly describe the ad..."
+                rows={3}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                maxLength={1000}
               />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  CTA Text
+                </label>
+                <input
+                  type="text"
+                  value={ctaText}
+                  onChange={(e) => setCtaText(e.target.value)}
+                  placeholder="e.g. Shop Now"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                  maxLength={100}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  CTA URL
+                </label>
+                <input
+                  type="url"
+                  value={ctaUrl}
+                  onChange={(e) => setCtaUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Ad Type
+              </label>
+              <select
+                value={adType}
+                onChange={(e) => setAdType(e.target.value as AdType)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+              >
+                {AD_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              Ad Type
-            </label>
-            <select
-              value={adType}
-              onChange={(e) => setAdType(e.target.value as AdType)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-            >
-              {AD_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <ImageUploadCard
-            imageUrl={imageUrl}
-            onUpload={handleImageUpload}
-            onRemove={handleImageRemove}
-          />
-        </div>
-
-        {adType === "video" && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <VideoUploadCard
-              videoUrl={videoUrl}
-              onUpload={handleVideoUpload}
-              onRemove={handleVideoRemove}
+            <ImageUploadCard
+              imageUrl={imageUrl}
+              onUpload={handleImageUpload}
+              onRemove={handleImageRemove}
             />
           </div>
-        )}
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <PlacementRulesForm
-            rules={placementRules}
-            onChange={setPlacementRules}
-          />
+          {adType === "video" && (
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <VideoUploadCard
+                videoUrl={videoUrl}
+                onUpload={handleVideoUpload}
+                onRemove={handleVideoRemove}
+            />
+          </div>
+          )}
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <PlacementRulesForm
+              rules={placementRules}
+              onChange={setPlacementRules}
+            />
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <ScheduleForm
+              startAt={startAt}
+              endAt={endAt}
+              timezone={timezone}
+              isPrimeTimeEnabled={isPrimeTimeEnabled}
+              onChange={handleScheduleChange}
+            />
+          </div>
+
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              type="button"
+              disabled={saving || !title}
+              onClick={() => handleSubmit(true)}
+              className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            >
+              {saving ? "Saving..." : "Save as Draft"}
+            </button>
+            <button
+              type="button"
+              disabled={saving || !title}
+              onClick={() => handleSubmit(false)}
+              className="px-5 py-2.5 bg-purple-600 rounded-lg text-sm font-medium text-white hover:bg-purple-800 disabled:opacity-50 transition-colors"
+            >
+              {saving ? "Publishing..." : mode === "create" ? "Publish Ad" : "Save Changes"}
+            </button>
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="px-5 py-2.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <ScheduleForm
-            startAt={startAt}
-            endAt={endAt}
-            timezone={timezone}
-            isPrimeTimeEnabled={isPrimeTimeEnabled}
-            onChange={handleScheduleChange}
-          />
-        </div>
+        {/* Right Sidebar - Sticky Content */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-6">
+            {/* NEW: Position Layout Preview Button */}
+            <button
+              type="button"
+              onClick={() => setShowPreviewModal(true)}
+              className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-3 bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 rounded-xl text-sm font-semibold transition-colors"
+            >
+              <LayoutTemplate className="w-4 h-4" />
+              Preview Position Layout
+            </button>
 
-        <div className="flex items-center gap-3 pt-2">
-          <button
-            type="button"
-            disabled={saving || !title}
-            onClick={() => handleSubmit(true)}
-            className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
-          >
-            {saving ? "Saving..." : "Save as Draft"}
-          </button>
-          <button
-            type="button"
-            disabled={saving || !title}
-            onClick={() => handleSubmit(false)}
-            className="px-5 py-2.5 bg-purple-600 rounded-lg text-sm font-medium text-white hover:bg-purple-800 disabled:opacity-50 transition-colors"
-          >
-            {saving ? "Publishing..." : mode === "create" ? "Publish Ad" : "Save Changes"}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-5 py-2.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            Cancel
-          </button>
+            <AdPreviewCard
+              title={title}
+              description={description}
+              ctaText={ctaText}
+              ctaUrl={ctaUrl}
+              imageUrl={imageUrl}
+              videoUrl={videoUrl}
+              adType={adType}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="lg:col-span-1">
-        <div className="sticky top-6">
-          <AdPreviewCard
-            title={title}
-            description={description}
-            ctaText={ctaText}
-            ctaUrl={ctaUrl}
-            imageUrl={imageUrl}
-            videoUrl={videoUrl}
-            adType={adType}
-          />
+      {/* NEW: Dynamic Placement Preview Modal */}
+      {showPreviewModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Layout Position Preview
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Showing placement layout based on your first rule position.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowPreviewModal(false)}
+                className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Canvas Wrapper */}
+            <div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
+              <Image 
+                src={bgImage} 
+                alt="Website Layout Reference" 
+                fill 
+                className="object-cover opacity-80"
+                priority
+              />
+              
+              <div 
+                className={`absolute w-72 shadow-2xl transition-all duration-500 ease-in-out ${getPositionClasses(placementRules[0]?.position)}`}
+              >
+                <AdPreviewCard
+                  title={title}
+                  description={description}
+                  ctaText={ctaText}
+                  ctaUrl={ctaUrl}
+                  imageUrl={imageUrl}
+                  videoUrl={videoUrl}
+                  adType={adType}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
